@@ -4,6 +4,12 @@
 # Gradle files
 /gradle/wrapper/gradle-wrapper.properties
 
+# Local properties (don't commit real credentials)
+local.properties
+
+# Gradle local settings (per-developer)
+gradle.properties
+
 # .idea and .vscode
 /.idea/
 /.vscode/
@@ -11,9 +17,6 @@
 # OS files
 .DS_Store
 Thumbs.db
-
-# Local properties (don't commit real credentials)
-local.properties
 
 # API keys / secrets
 *.key

@@ -1,0 +1,12 @@
+<resources>
+    <style name="Theme.OllamaApp" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="android:windowBackground">@color/android_white</item>
+    </style>
+
+    <style name="Theme.OllamaApp.Light" parent="Theme.OllamaApp">
+    </style>
+
+    <style name="Theme.OllamaApp.Dark" parent="Theme.OllamaApp">
+        <item name="colorScheme">@color/dark_color_scheme</item>
+    </style>
+</resources>

@@ -1,0 +1,36 @@
+plugins {
+    id("com.android.application")
+    id("org.jetbrains.kotlin.android")
+}
+
+android {
+    namespace "com.example.ollamapp"
+    compileSdk 34
+
+    defaultConfig {
+        applicationId "com.example.ollamapp"
+        minSdk 24
+        targetSdk 34
+        versionCode 1
+        versionName "1.0"
+    }
+
+    buildFeatures {
+        compose true
+    }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.5.0"
+    }
+}
+
+dependencies {
+    implementation("androidx.core:core-ktx:1.13.0")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.1")
+    implementation(platform("androidx.compose.material3:material3:1.2.0"))
+    implementation("androidx.compose.ui:ui:1.2.0")
+    implementation("androidx.compose.material3:material3:1.2.0")
+    implementation("androidx.compose.ui:ui-tooling-preview:1.2.0")
+    kotlin("stdlib-jdk8") version "1.9.22"
+    implementation("com.squareup.okhttp3:okhttp:4.12.0")
+}

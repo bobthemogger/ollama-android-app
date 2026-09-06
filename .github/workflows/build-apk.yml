@@ -19,11 +19,27 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
+      - name: Download Gradle
+        run: |
+          cd /tmp
+          curl -sL https://services.gradle.org/distributions/gradle-7.6.3-bin.zip -o gradle-7.6.3-bin.zip
+          unzip -q gradle-7.6.3-bin.zip -d /opt/gradle
+          ln -sf /opt/gradle/gradle-7.6.3/bin/gradle /usr/local/bin/gradle7
+          gradle7 --version
+
+      - name: Create Gradle Wrapper
+        run: |
+          cd /public/ollama-app
+          cd /opt/gradle7/gradle-7.6.3
+          export PATH=/opt/gradle7/gradle-7.6.3/bin:$PATH
+          gradle7 wrapper --gradle-version=7.6.3 --no-daemon
+          chmod +x gradlew
 
       - name: Build with Gradle
-        run: ./gradlew assembleDebug
+        run: |
+          cd /public/ollama-app
+          export PATH=/opt/gradle7/gradle-7.6.3/bin:$PATH
+          ./gradlew assembleDebug --no-daemon
 
       - name: Upload APK Artifact
         uses: actions/upload-artifact@v4

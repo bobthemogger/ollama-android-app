@@ -1,0 +1,20 @@
+# Build outputs
+/app/build/
+
+# Gradle files
+/gradle/wrapper/gradle-wrapper.properties
+
+# .idea and .vscode
+/.idea/
+/.vscode/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Local properties (don't commit real credentials)
+local.properties
+
+# API keys / secrets
+*.key
+*.pem

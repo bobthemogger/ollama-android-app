@@ -34,11 +34,18 @@ android {
 }
 
 dependencies {
+    // Use Compose BOM to align versions across Compose artifacts
+    implementation(platform("androidx.compose:compose-bom:2024.07.00"))
+
     implementation("androidx.core:core-ktx:1.13.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.1")
-    implementation("androidx.compose.material3:material3:1.2.0")
-    implementation("androidx.compose.ui:ui:1.2.0")
-    implementation("androidx.compose.ui:ui-tooling-preview:1.2.0")
+
+    // Compose artifacts - versions are provided by the BOM
+    implementation("androidx.compose.ui:ui")
+    implementation("androidx.compose.material3:material3")
+    implementation("androidx.compose.ui:ui-tooling-preview")
+    debugImplementation("androidx.compose.ui:ui-tooling")
+
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
     implementation(kotlin("stdlib-jdk8"))
 }

@@ -34,25 +34,38 @@ jobs:
         run: |
           if [ -f ./gradlew ]; then chmod +x ./gradlew; fi
 
-      - name: Ensure Gradle 8.4 (use wrapper if available)
+      - name: Ensure Gradle 8.4 (install if wrapper not present and prepend to PATH)
         run: |
           if [ -x ./gradlew ]; then
-            echo "Using Gradle wrapper"
+            echo "Gradle wrapper present, using ./gradlew"
           else
-            echo "Gradle wrapper not found, installing Gradle 8.4 to PATH"
+            echo "Gradle wrapper not found, installing Gradle 8.4 to $HOME/gradle-8.4"
             wget https://services.gradle.org/distributions/gradle-8.4-bin.zip -O gradle-8.4-bin.zip
-            unzip -q gradle-8.4-bin.zip -d $HOME
-            echo "$HOME/gradle-8.4/bin" >> $GITHUB_PATH
+            mkdir -p $HOME/gradle-8.4
+            unzip -q gradle-8.4-bin.zip -d $HOME/gradle-8.4
+            if [ -d $HOME/gradle-8.4/gradle-8.4 ]; then
+              mv $HOME/gradle-8.4/gradle-8.4/* $HOME/gradle-8.4/ || true
+            fi
+            # Prepend gradle-8.4 to PATH so it wins over /opt/gradle
+            echo "$HOME/gradle-8.4/bin:$PATH" >> $GITHUB_ENV
+          fi
+
+      - name: Export Gradle command
+        run: |
+          if [ -x ./gradlew ]; then
+            echo "GRADLE_CMD=./gradlew" >> $GITHUB_ENV
+          else
+            echo "GRADLE_CMD=gradle" >> $GITHUB_ENV
           fi
 
       - name: Verify Gradle & Java
         run: |
-          if [ -x ./gradlew ]; then ./gradlew --version; else gradle --version; fi
+          echo "Using command: $GRADLE_CMD"
+          $GRADLE_CMD --version || true
           java -version
 
       - name: Ensure Android SDK packages (if sdkmanager is present)
         run: |
-          # If sdkmanager is available, install needed packages and accept licenses.
           if command -v sdkmanager >/dev/null 2>&1; then
             echo "sdkmanager found; installing platform-tools, build-tools and platform (android-34)"
             yes | sdkmanager "platform-tools" "platforms;android-34" "build-tools;34.0.0"
@@ -64,14 +77,11 @@ jobs:
       - name: Build debug APK
         env:
           # If your repo expects ANDROID_HOME/ANDROID_SDK_ROOT, set it here or in secrets
-          # ANDROID_SDK_ROOT: ${{ runner.os == 'Windows' && 'C:\\Android\\sdk' || '/usr/local/android-sdk' }}
+          # ANDROID_SDK_ROOT: ${{ runner.os == 'Windows' && 'C:\Android\sdk' || '/usr/local/android-sdk' }}
         run: |
           set -e
-          if [ -x ./gradlew ]; then
-            ./gradlew clean assembleDebug --stacktrace --info
-          else
-            gradle clean assembleDebug --stacktrace --info
-          fi
+          echo "Using gradle command: $GRADLE_CMD"
+          $GRADLE_CMD clean assembleDebug --stacktrace --info
 
       - name: Upload debug APK
         if: success() && always()

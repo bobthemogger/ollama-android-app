@@ -24,13 +24,16 @@ jobs:
           cd /tmp
           curl -sL https://services.gradle.org/distributions/gradle-7.6.3-bin.zip -o gradle-7.6.3-bin.zip
           unzip -o gradle-7.6.3-bin.zip -d /opt/gradle
-          ls /opt/gradle/gradle-7.6.3/bin/gradle
+          echo "Gradle files:" && ls /opt/gradle/gradle-7.6.3/bin/
 
       - name: Create Gradle Wrapper
         run: |
-          cd /opt/gradle7/gradle-7.6.3
-          export PATH=/opt/gradle7/gradle-7.6.3/bin:$PATH
-          gradle7 wrapper --gradle-version=7.6.3 --no-daemon
+          mkdir -p /opt/gradle7
+          ls /opt/gradle/gradle-7.6.3/bin/gradle
+          cp -r /opt/gradle/gradle-7.6.3 /opt/gradle7/gradle-7.6.3
+          chmod +x /opt/gradle7/gradle-7.6.3/bin/gradle
+          ln -sf /opt/gradle7/gradle-7.6.3/bin/gradle /usr/local/bin/gradle7
+          /opt/gradle7/gradle-7.6.3/bin/gradle wrapper --gradle-version=7.6.3 --no-daemon
           chmod +x /public/ollama-app/gradlew
 
       - name: Build with Gradle

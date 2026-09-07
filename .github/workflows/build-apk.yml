@@ -19,13 +19,12 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: Download and install Gradle 7.6.3
+      - name: Download Gradle 7.6.3
         run: |
           cd /tmp
           curl -sL https://services.gradle.org/distributions/gradle-7.6.3-bin.zip -o gradle-7.6.3-bin.zip
           unzip -o gradle-7.6.3-bin.zip -d /opt/gradle
-          ln -sf /opt/gradle/gradle-7.6.3/bin/gradle /usr/local/bin/gradle7
-          echo "Gradle installed at /opt/gradle/gradle-7.6.3"
+          ls /opt/gradle/gradle-7.6.3/bin/gradle
 
       - name: Create Gradle Wrapper
         run: |
